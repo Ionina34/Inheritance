@@ -4,33 +4,7 @@
     <Position X="1.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAAAQQCAAAAMAAAAAAAAAAAABEAAAAyAQAA=</HashCode>
-      <FileName>Source.cpp</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Student" Collapsed="true">
-    <Position X="2.75" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>QS4AAAAAQAAAAAAABAAAgAAAAQQAAAAAQAAEAAAAEAA=</HashCode>
-      <FileName>Source.cpp</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Teacher">
-    <Position X="0.5" Y="1.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAUAAAEAAAAAAAAAAAAAAAAAAAAAAACAQCBEAgAAAAA=</HashCode>
-      <FileName>Source.cpp</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Graduate" Collapsed="true">
-    <Position X="2.75" Y="3" Width="1.5" />
-    <InheritanceLine Type="Student">
-      <InheritanceModifierLabel ManuallyPlaced="true">
-        <Position X="-0.692" Y="0.487" />
-      </InheritanceModifierLabel>
-    </InheritanceLine>
-    <TypeIdentifier>
-      <HashCode>AAYAAAAAAAAAAAAAAAAAAACAACAAAAAAAAAAAAAIIAA=</HashCode>
-      <FileName>Source.cpp</FileName>
+      <FileName>Human.h</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
