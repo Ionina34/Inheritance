@@ -45,11 +45,17 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
+#ifdef DEBUG
 		cout << "HConstructoe:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	virtual ~Human()
 	{
+#ifdef DEBUG
 		cout << "HDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 
 	//                Methods
@@ -58,6 +64,11 @@ public:
 		cout << last_name << " " << first_name << " " << age << endl;
 	}
 };
+
+ std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return os << obj.get_last_name() + " " + obj.get_first_name() << " " << obj.get_age();
+}
 
 #define STUDENT_TAKE_PARAMETERS const std::string& speciality, const std::string& group, double rating, double attendance
 #define STUDENT_GIVE_PARAMETERS speciality, group, rating, attendance
@@ -81,7 +92,7 @@ public:
 	{
 		return rating;
 	}
-	double det_attendance()const
+	double get_attendance()const
 	{
 		return attendance;
 	}
@@ -109,11 +120,17 @@ public:
 		this->group = group;
 		this->rating = rating;
 		this->attendance = attendance;
+#ifdef DEBUG
 		cout << "SConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Student()
 	{
+#ifdef DEBUG
 		cout << "SDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 
 	//                         Methods:
@@ -123,6 +140,14 @@ public:
 		cout << speciality + " " + group << " " << rating << " " << attendance << endl;
 	}
 };
+
+std::ostream& operator<<(std::ostream& os, const Student& obj)
+{
+	os << (Human)obj;
+	return
+		os <<" " << obj.get_speciality() + " " + obj.get_group()
+		<< " " << obj.get_rating() << " " << obj.get_attendance();
+}
 
 #define TEACHER_TAKE_PARAMETERS const std::string& spetiality, unsigned int experience
 #define	TEACHER_GIVE_PARAMETERS spetiality, experience
@@ -154,11 +179,17 @@ public:
 	{
 		set_speciality(spetiality);
 		set_experience(experience);
+#ifdef DEBUG
 		cout << "TConstrructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Teacher()
 	{
+#ifdef DEBUG
 		cout << "TDectructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 
 	//                          Methods:
@@ -168,6 +199,12 @@ public:
 		cout << spetiality << " " << experience << endl;
 	}
 };
+
+std::ostream& operator<<(std::ostream& os, const Teacher& obj)
+{
+	os << (Human)obj;
+	return os <<" " << obj.get_speciality() << " " << obj.get_experience();
+}
 
 class Graduate :public Student
 {
@@ -186,11 +223,17 @@ public:
 	Graduate(HUMAN_TAKE_PARAMETERS, STUDENT_TAKE_PARAMETERS, const std::string& subject) :Student(HUMAN_GIVE_PARAMETERTS, STUDENT_GIVE_PARAMETERS)
 	{
 		set_subject(subject);
+#ifdef DEBUG
 		cout << "GConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Graduate()
 	{
+#ifdef DEBUG
 		cout << "GDectructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 
 	//                          Methods:
@@ -200,6 +243,12 @@ public:
 		cout << subject << endl;
 	}
 };
+
+std::ostream& operator<<(std::ostream& os, const Graduate& obj)
+{
+	os << (Student)obj;
+	return os << " " << obj.get_subject();
+}
 
 //#define INHERITANCE_CHECK
 
@@ -218,7 +267,8 @@ void main()
 	gr.print();
 #endif // INHERITANCE_CHECK
 
-	//Generalisation (обобщение)
+	//Generalisation (обобщение):
+	//Upcast - преобразование дочернего объкта в базовый класс
 	Human* group[] =
 	{
 		new Student("Piknman","Jessie",25,"Chemistry","WW_011",90,80),
@@ -232,10 +282,16 @@ void main()
 	cout << sizeof(group)/sizeof(group[0]) << endl;
 	cout << sizeof(Human*) << endl;
 	cout << "\n---------------------------------------\n";
-	//Specialisation
+	//Specialisation:
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
-		group[i]->print();
+		//group[i]->print();
+
+		//Downcast - из базового в дочерний
+		cout << typeid(*group[i]).name()<<endl;
+		if (typeid(*group[i]) == typeid(Student))cout << *dynamic_cast<Student*>(group[i]) << endl;
+		if (typeid(*group[i]) == typeid(Graduate))cout << *dynamic_cast<Graduate*>(group[i]) << endl;
+		if (typeid(*group[i]) == typeid(Teacher))cout << *dynamic_cast<Teacher*>(group[i]) << endl;
 		cout << "\n---------------------------------------\n";
 	}
 
