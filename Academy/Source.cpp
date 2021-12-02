@@ -1,4 +1,5 @@
 ﻿#include<iostream>
+#include<fstream>
 #include<string>
 #include<ctime>
 #include<iomanip>
@@ -228,6 +229,8 @@ public:
 	}
 };
 
+//void print(Human* arr[], const int n);
+
 //#define INHERITANCE_CHECK
 
 void main()
@@ -267,8 +270,19 @@ void main()
 	}
 	cout << "\n---------------------------------------\n";
 
+	std::ofstream fout("group.txt");
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		//group[i]->print();
+		fout << typeid(*group[i]).name()<<":\t" << *group[i] << endl;
+	}
+	fout.close();
+
+	system("start notepad group.txt");
+
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
 	}
 }
+
