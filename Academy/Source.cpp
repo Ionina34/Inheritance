@@ -1,6 +1,7 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<string>
 #include<ctime>
+#include<iomanip>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -53,11 +54,32 @@ public:
 	}
 
 	//                Methods
-	virtual void print()const
+	virtual std::ostream& print(std::ostream& os)const
 	{
-		cout << last_name << " " << first_name << " " << age << endl;
+		//return os << last_name  << " " << first_name<< " " << age;
+
+		//os.width(15);    //Ð—Ð°Ð´Ð°ÐµÑ‚ ÑˆÐ¸Ñ€Ð¸Ð½Ñƒ Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ð¼Ð¾Ð³Ð¾ Ð¿Ð¾Ð»Ñ 
+		//os << std::left; //Ð—Ð°Ð´Ð°ÐµÑ‚ Ð²Ñ‹Ñ€Ð°Ð²Ð½Ð¸Ð²Ð°Ð½Ð¸Ðµ Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ð¼Ð¾Ð³Ð¾ Ð¿Ð¾Ð»Ñ
+		//os << last_name;
+		//os.width(10);
+		//os << std::left;
+		//os << first_name;
+		//os.width(5);
+		//os << std::right;
+		//os << age;
+		//return os;
+
+		return os
+			<< std::setw(15) << std::left<< last_name
+			<< std::setw(10) << std::left << first_name
+			<< std::setw(5) << std::right << age;
 	}
 };
+
+std::ostream& operator<<(std::ostream& os, const Human& obj)
+{
+	return obj.print(os);
+}
 
 #define STUDENT_TAKE_PARAMETERS const std::string& speciality, const std::string& group, double rating, double attendance
 #define STUDENT_GIVE_PARAMETERS speciality, group, rating, attendance
@@ -66,8 +88,8 @@ class Student :public Human
 {
 	std::string speciality;
 	std::string group;
-	double rating;     // Óñïåâàåìîñòü
-	double attendance; //Ïîñåùàåìîñòü
+	double rating;     // Ð£ÑÐ¿ÐµÐ²Ð°ÐµÐ¼Ð¾ÑÑ‚ÑŒ
+	double attendance; //ÐŸÐ¾ÑÐµÑ‰Ð°ÐµÐ¼Ð¾ÑÑ‚ÑŒ
 public:
 	const std::string& get_speciality()const
 	{
@@ -117,10 +139,14 @@ public:
 	}
 
 	//                         Methods:
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << speciality + " " + group << " " << rating << " " << attendance << endl;
+		//return Human::print(os) << " " << speciality + " " + group << " " << rating << " " << attendance;
+		return Human::print(os)<<" "
+			<< std::setw(25) << std::left << speciality
+			<< std::setw(10) << std::left << group
+			<< std::setw(5) << std::right << rating
+			<< std::setw(5) << std::right << attendance;
 	}
 };
 
@@ -162,16 +188,18 @@ public:
 	}
 
 	//                          Methods:
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Human::print();
-		cout << spetiality << " " << experience << endl;
+		//return Human::print(os) << " " << spetiality << " " << experience;
+		return Human::print(os) << " "
+			<< std::setw(35) << std::left << spetiality
+			<< std::setw(5) << std::right << experience;
 	}
 };
 
 class Graduate :public Student
 {
-	std::string subject;     //Òåìà äèïëîìíîãî ïðîåêòà
+	std::string subject;     //Ð¢ÐµÐ¼Ð° Ð´Ð¸Ð¿Ð»Ð¾Ð¼Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¾ÐµÐºÑ‚Ð°
 public:
 	const std::string& get_subject()const
 	{
@@ -194,10 +222,9 @@ public:
 	}
 
 	//                          Methods:
-	void print()const
+	std::ostream& print(std::ostream& os)const
 	{
-		Student::print();
-		cout << subject << endl;
+		return Student::print(os) << " " << subject;
 	}
 };
 
@@ -208,7 +235,7 @@ void main()
 	setlocale(LC_ALL, "Rus");
 
 #ifdef INHERITANCE_CHECK
-	Human hm("Òóïåíêî", "Âàñèëèé", 18);
+	Human hm("Ð¢ÑƒÐ¿ÐµÐ½ÐºÐ¾", "Ð’Ð°ÑÐ¸Ð»Ð¸Ð¹", 18);
 	hm.print();
 	Student st("Pinkman", "Jessie", 28, "Chemistry", "ww_01", 90, 85);
 	st.print();
@@ -218,7 +245,7 @@ void main()
 	gr.print();
 #endif // INHERITANCE_CHECK
 
-	//Generalisation (îáîáùåíèå)
+	//Generalisation (Ð¾Ð±Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ)
 	Human* group[] =
 	{
 		new Student("Piknman","Jessie",25,"Chemistry","WW_011",90,80),
@@ -229,19 +256,19 @@ void main()
 		new Teacher("Enisten","Albert",142,"Astronomy",110)
 	};
 
-	cout << sizeof(group)/sizeof(group[0]) << endl;
+	cout << sizeof(group) / sizeof(group[0]) << endl;
 	cout << sizeof(Human*) << endl;
 	cout << "\n---------------------------------------\n";
 	//Specialisation
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
-		group[i]->print();
-		cout << "\n---------------------------------------\n";
+		//group[i]->print();
+		cout << *group[i] << endl;
 	}
+	cout << "\n---------------------------------------\n";
 
 	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		delete group[i];
 	}
-
 }
