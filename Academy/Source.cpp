@@ -79,12 +79,20 @@ public:
 	virtual std::ofstream& print(std::ofstream& os)const
 	{
 		os
-			<< std::setw(15) << std::left << last_name << ","
-			<< std::setw(10) << std::left << first_name << ","
+			<< std::setw(15) << std::left << last_name + ","
+			<< std::setw(10) << std::left << first_name + ","
 			<< std::setw(5) << std::right << age;
 		return os;
 	}
-
+	virtual std::ifstream& input(std::ifstream& is)
+	{
+		std::getline(is, last_name, ',');
+		std::getline(is, first_name, ',');
+		std::string age_buffer;
+		std::getline(is, age_buffer, ',');
+		age = std::stoi(age_buffer);
+		return is;
+	}
 };
 
 std::ostream& operator<<(std::ostream& os, const Human& obj)
@@ -94,6 +102,10 @@ std::ostream& operator<<(std::ostream& os, const Human& obj)
 std::ofstream& operator<<(std::ofstream& os, const Human& obj)
 {
 	return obj.print(os);
+}
+std::ifstream& operator>>(std::ifstream& is, Human& obj)
+{
+	return obj.input(is);
 }
 
 #define STUDENT_TAKE_PARAMETERS const std::string& speciality, const std::string& group, double rating, double attendance
@@ -167,13 +179,23 @@ public:
 	{
 		//return Human::print(os) << " " << speciality + " " + group << " " << rating << " " << attendance;
 		Human::print(os) << ","
-			<< std::setw(25) << std::left << speciality << ","
-			<< std::setw(10) << std::left << group << ","
-			<< std::setw(5) << std::right << rating << ","
+			<< std::setw(25) << std::left << speciality + ","
+			<< std::setw(10) << std::left << group + ","
+			<< std::setw(5) << std::right << rating<< ","
 			<< std::setw(5) << std::right << attendance;
 		return os;
 	}
-
+	std::ifstream& input(std::ifstream& is)
+	{
+		Human::input(is);
+		std::getline(is, speciality,',');
+		std::getline(is, group,',');
+		is >> rating;
+		is.ignore();
+		is >> attendance;
+		return is;
+		this;
+	}
 };
 
 #define TEACHER_TAKE_PARAMETERS const std::string& spetiality, unsigned int experience
@@ -225,11 +247,17 @@ public:
 	{
 		//return Human::print(os) << " " << spetiality << " " << experience;
 		Human::print(os) << ","
-			<< std::setw(35) << std::left << spetiality << ","
+			<< std::setw(35) << std::left << spetiality + ","
 			<< std::setw(5) << std::right << experience;
 		return os;
 	}
-
+	std::ifstream& input(std::ifstream& is)
+	{
+		Human::input(is);
+		std::getline(is, spetiality,',');
+		is >> experience;
+		return is;
+	}
 };
 
 class Graduate :public Student
@@ -266,12 +294,33 @@ public:
 		 Student::print(os) << "," << subject;
 		 return os;
 	}
-
+	std::ifstream& input(std::ifstream& is)
+	{
+		Student::input(is);
+		std::getline(is, subject, ';');
+		return is;
+	}
 };
 
 //void print(Human* arr[], const int n);
 
+Human* HumanFactory(const std::string& type)
+{
+	if (type.find ("class Student")!=std::string::npos)
+	{
+		return new Student("last_name","first_name",0,"specs","group",0,0);
+	}
+	if(type.find("class Graduant") != std::string::npos)
+	{
+		return new Graduate("last_name", "first_name", 0, "specs", "group", 0, 0,"subject");
+	}
+	if (type.find("class Teacher") != std::string::npos)
+	{
+		return new Teacher("last_name", "first_name", 0, "specs", 0);
+	}
+}
 //#define INHERITANCE_CHECK
+//#define SAVE_TO_FILE
 
 void main()
 {
@@ -288,6 +337,7 @@ void main()
 	gr.print();
 #endif // INHERITANCE_CHECK
 
+#ifdef SAVE_TO_FILE
 	//Generalisation (обобщение)
 	Human* group[] =
 	{
@@ -315,7 +365,7 @@ void main()
 	{
 		//group[i]->print();
 		fout << typeid(*group[i]).name() << ":\t";
-		fout<< *group[i] << ";" << endl;
+		fout << *group[i] << ";" << endl;
 	}
 	fout.close();
 
@@ -325,5 +375,60 @@ void main()
 	{
 		delete group[i];
 	}
+#endif // SAVE_TO_FILE
+
+	std::ifstream fin("group.txt");
+
+	size_t size = 0;
+	Human** group = nullptr;
+
+	if (fin.is_open())
+	{
+		//1)Считаем кол-во строк в файле, чтобы выделить память для группы:
+		std::string buffer;
+		for (size = 0; !fin.eof(); size++)
+		{
+			std::getline(fin, buffer, ';');
+		}
+		cout << "Размер группы: " << size << endl;
+		cout << "Позиция: " << fin.tellg() << endl;
+		//2)Выделяем память для группы:
+		group = new Human* [--size]{};
+		//3)Возвращаемя в начало файла для того чтобы уже прочитать строки 
+		//и загрузить из в массив
+		fin.clear();
+		fin.seekg(0);
+		cout << "Позиция: " << fin.tellg() << endl;
+		//4)Заново читаем файл, и сохраняем его строки в объкты:
+		for (int i = 0; i < size; i++)
+		{
+			std::getline(fin, buffer, '\t');
+			group[i] = HumanFactory(buffer);
+			fin >> *group[i];
+			cout << *group[i] << endl;
+		}
+		fin.close();
+	}
+	else
+	{
+		std::cerr << "Error: file not found :-(\n";
+	}
+
+	cout << "\n---------------------------------------\n";
+	
+	//Specialisation
+	for (int i = 0; i < size; i++)
+	{
+		//group[i]->print();
+		cout << *group[i] << endl;
+	}
+
+	cout << "\n---------------------------------------\n";
+
+	for (int i = 0; i < size; i++)
+	{
+		delete group[i];
+	}
+	delete[] group;
 }
 
