@@ -1,6 +1,6 @@
-class Student:	Piknman        Jessie       25 Chemistry                WW_011       90   80
-class Student:	Vecetti        Tomas        30 City business            Vice         88   90
-class Teacher:	White          Walter       50 Chemistry                             20
-class Student:	Diaz           Ricardo      55 Weapons distribution     Vice         91   80
-class Graduate:	Shrader        Hank         40 Criminalistics           OBN          86   90 How to catch Heisenderg
-class Teacher:	Enisten        Albert      142 Astronomy                            110
+class Student:	Piknman        ,Jessie    ,   25,Chemistry                ,WW_011    ,   90,   80;
+class Student:	Vecetti        ,Tomas     ,   30,City business            ,Vice      ,   88,   90;
+class Teacher:	White          ,Walter    ,   50,Chemistry                          ,   20;
+class Student:	Diaz           ,Ricardo   ,   55,Weapons distribution     ,Vice      ,   91,   80;
+class Graduate:	Shrader        ,Hank      ,   40,Criminalistics           ,OBN       ,   86,   90,How to catch Heisenderg;
+class Teacher:	Enisten        ,Albert    ,  142,Astronomy                          ,  110;
