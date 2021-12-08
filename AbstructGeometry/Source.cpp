@@ -199,7 +199,7 @@ void main()
 
 	Geometry::Circle kr(2, Geometry::Color::console_blue); kr.info();
 
-	const double PI = acos(-1.0);
-	cout << PI << endl;
+	/*const double PI = acos(-1.0);
+	cout << PI << endl;*/
 
 }
