@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 #include<Windows.h>
 #include<cmath>
 using namespace std;
@@ -14,7 +14,7 @@ namespace Geometry
 		conslole_yellow = 0xEE,
 		conslode_white = 0xFF
 	};
-	//enum (Enumeration или перечисление) - это набор именованных констант типа 'int'
+	//enum (Enumeration РёР»Рё РїРµСЂРµС‡РёСЃР»РµРЅРёРµ) - СЌС‚Рѕ РЅР°Р±РѕСЂ РёРјРµРЅРѕРІР°РЅРЅС‹С… РєРѕРЅСЃС‚Р°РЅС‚ С‚РёРїР° 'int'
 
 	class Shape
 	{
@@ -24,9 +24,9 @@ namespace Geometry
 		Shape(Color color) :color(color) {}
 		virtual ~Shape() {}
 
-		virtual double get_area()const = 0;      //Площадь фигуры
-		virtual double get_perimeter()const = 0; // Периметер фигуры
-		virtual void draw()const = 0;            //Любую фигуру можно нарисовать
+		virtual double get_area()const = 0;      //РџР»РѕС‰Р°РґСЊ С„РёРіСѓСЂС‹
+		virtual double get_perimeter()const = 0; // РџРµСЂРёРјРµС‚РµСЂ С„РёРіСѓСЂС‹
+		virtual void draw()const = 0;            //Р›СЋР±СѓСЋ С„РёРіСѓСЂСѓ РјРѕР¶РЅРѕ РЅР°СЂРёСЃРѕРІР°С‚СЊ
 	};
 
 	class Square :public Shape
@@ -75,9 +75,9 @@ namespace Geometry
 		void info()
 		{
 			cout << typeid(*this).name() << endl;
-			cout << "Длина стороны:\t" << side << endl;
-			cout << "Площадь:\t" << get_area() << endl;
-			cout << "Периметр:\t" << get_perimeter() << endl;
+			cout << "Р”Р»РёРЅР° СЃС‚РѕСЂРѕРЅС‹:\t" << side << endl;
+			cout << "РџР»РѕС‰Р°РґСЊ:\t" << get_area() << endl;
+			cout << "РџРµСЂРёРјРµС‚СЂ:\t" << get_perimeter() << endl;
 			draw();
 		}
 	};
@@ -137,10 +137,10 @@ namespace Geometry
 		void info()
 		{
 			cout << typeid(*this).name() << endl;
-			cout << "Длина стороны A:\t" << side_A << endl;
-			cout << "Длина стороны B:\t" << side_B << endl;
-			cout << "Площадь:\t" << get_area() << endl;
-			cout << "Периметр:\t" << get_perimeter() << endl;
+			cout << "Р”Р»РёРЅР° СЃС‚РѕСЂРѕРЅС‹ A:\t" << side_A << endl;
+			cout << "Р”Р»РёРЅР° СЃС‚РѕСЂРѕРЅС‹ B:\t" << side_B << endl;
+			cout << "РџР»РѕС‰Р°РґСЊ:\t" << get_area() << endl;
+			cout << "РџРµСЂРёРјРµС‚СЂ:\t" << get_perimeter() << endl;
 			draw();
 		}
 	};
@@ -174,14 +174,14 @@ public:
 	}
 	void draw() const
 	{
-		cout << "Представть что здесь круг (_ _ *)..Zzz" << endl;
+		cout << "РџСЂРµРґСЃС‚Р°РІС‚СЊ С‡С‚Рѕ Р·РґРµСЃСЊ РєСЂСѓРі (_ _ *)..Zzz" << endl;
 	}
 	void info()
 	{
 		cout << typeid(*this).name() << endl;
-		cout << "Длина радиуса:\t" << radius << endl;
-		cout << "Площадь:\t" << get_area()<<"п" << endl;
-		cout << "Периметр:\t" << get_perimeter()<<"п" << endl;
+		cout << "Р”Р»РёРЅР° СЂР°РґРёСѓСЃР°:\t" << radius << endl;
+		cout << "РџР»РѕС‰Р°РґСЊ:\t" << get_area()<<"Рї" << endl;
+		cout << "РџРµСЂРёРјРµС‚СЂ:\t" << get_perimeter()<<"Рї" << endl;
 		draw();
 	}
 };
