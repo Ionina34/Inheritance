@@ -8,6 +8,8 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+//#define CONSTRUCT_DESTRUCT
+
 #define HUMAN_TAKE_PARAMETERS const std::string& last_name, const std::string& first_name, unsigned int age
 #define HUMAN_GIVE_PARAMETERTS last_name, first_name, age
 
@@ -48,11 +50,17 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "HConstructoe:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 	virtual ~Human()
 	{
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "HDestructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 
 	//                Methods
@@ -158,11 +166,17 @@ public:
 		this->group = group;
 		this->rating = rating;
 		this->attendance = attendance;
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "SConstructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 	~Student()
 	{
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "SDestructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 
 	//                         Methods:
@@ -228,11 +242,17 @@ public:
 	{
 		set_speciality(spetiality);
 		set_experience(experience);
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "TConstrructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 	~Teacher()
 	{
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "TDectructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 
 	//                          Methods:
@@ -277,11 +297,17 @@ public:
 	Graduate(HUMAN_TAKE_PARAMETERS, STUDENT_TAKE_PARAMETERS, const std::string& subject) :Student(HUMAN_GIVE_PARAMETERTS, STUDENT_GIVE_PARAMETERS)
 	{
 		set_subject(subject);
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "GConstructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 	~Graduate()
 	{
+#ifdef CONSTRUCT_DESTRUCT
 		cout << "GDectructor:\t" << this << endl;
+#endif // CONSTRUCT_DESTRUCT
+
 	}
 
 	//                          Methods:
