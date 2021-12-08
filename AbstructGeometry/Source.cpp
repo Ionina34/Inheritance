@@ -166,11 +166,11 @@ public:
 
 	double get_area()const
 	{
-		return 3,14 * pow(radius, 2);
+		return pow(radius, 2) ;
 	}
 	double get_perimeter()const
 	{
-		return 2 * 3,14 * radius;
+		return 2  * radius;
 	}
 	void draw() const
 	{
@@ -180,8 +180,8 @@ public:
 	{
 		cout << typeid(*this).name() << endl;
 		cout << "Длина радиуса:\t" << radius << endl;
-		cout << "Площадь:\t" << get_area() << endl;
-		cout << "Периметр:\t" << get_perimeter() << endl;
+		cout << "Площадь:\t" << get_area()<<"п" << endl;
+		cout << "Периметр:\t" << get_perimeter()<<"п" << endl;
 		draw();
 	}
 };
@@ -197,7 +197,7 @@ void main()
 
 	Geometry::Rectangle rect(5, 12, Geometry::Color::conslole_yellow); rect.info();
 
-	Geometry::Circle kr(2, Geometry::Color::console_blue); kr.info();
+	Geometry::Circle kr(5, Geometry::Color::console_blue); kr.info();
 
 	/*const double PI = acos(-1.0);
 	cout << PI << endl;*/
