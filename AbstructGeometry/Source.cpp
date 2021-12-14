@@ -145,46 +145,55 @@ namespace Geometry
 		}
 	};
 
-class Circle: public Shape
-{
-	double radius;
-public:
-	double get_radius()const
+	class Circle : public Shape
 	{
-		return radius;
-	}
-	void set_radius(double radius)
-	{
-		if (radius <= 0)radius = 1;
-		this->radius = radius;
-	}
-	Circle(double radius,Color color) :Shape(color)
-	{
-		set_radius(radius);
-	}
-	~Circle() {};
+		double radius;
+		//double diamiter = radius+radius;
+	public:
+		double get_radius()const
+		{
+			return radius;
+		}
+		/*double get_diamiter()const
+		{
+			return diamiter;
+		}*/
 
-	double get_area()const
-	{
-		return pow(radius, 2) ;
-	}
-	double get_perimeter()const
-	{
-		return 2  * radius;
-	}
-	void draw() const
-	{
-		cout << "Представть что здесь круг (_ _ *)..Zzz" << endl;
-	}
-	void info()
-	{
-		cout << typeid(*this).name() << endl;
-		cout << "Длина радиуса:\t" << radius << endl;
-		cout << "Площадь:\t" << get_area()<<"п" << endl;
-		cout << "Периметр:\t" << get_perimeter()<<"п" << endl;
-		draw();
-	}
-};
+		void set_radius(double radius)
+		{
+			if (radius <= 0)radius = 1;
+			this->radius = radius;
+		}
+		Circle(double radius, Color color) :Shape(color)
+		{
+			set_radius(radius);
+		}
+		~Circle() {};
+
+		double get_area()const
+		{
+			return pow(radius, 2);
+		}
+		double get_perimeter()const
+		{
+			return 2 * radius;
+		}
+		void draw() const
+		{
+			cout << "Представть что здесь круг (_ _ *)..Zzz" << endl;
+		}
+		void info()
+		{
+			cout << typeid(*this).name() << endl;
+			cout << "Длина радиуса:\t" << radius << endl;
+			cout << "Длина диаметра:\t" << 2 * radius << endl;
+			//cout << "Длина диаметра:\t" << diamiter << endl;
+			cout << "Площадь:\t" << get_area() << "п" << endl;
+			cout << "Периметр:\t" << get_perimeter() << "п" << endl;
+			draw();
+		}
+
+	};
 
 }
 
