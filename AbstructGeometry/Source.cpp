@@ -59,14 +59,23 @@ namespace Geometry
 		}
 		void set_start_x(unsigned int start_x)
 		{
-			if (start_x < 250)start_x = 250;
-			if (start_x >800)start_x = 800;
+			HWND hwnd = GetConsoleWindow();
+			RECT rect;
+			 GetWindowRect(hwnd,&rect);
+
+			if (start_x < 400)start_x = 400;
+			//if (start_x >800)start_x = 800;
+			if (start_x >(rect.right-rect.left)/2)start_x = (rect.right-rect.left)/2;
 			this->start_x = start_x;
 		}
 		void set_start_y(unsigned int start_y)
 		{
+			HWND hwnd = GetConsoleWindow();
+			RECT rect;
+			GetWindowRect(hwnd, & rect);
 			if (start_y <100)start_y = 100;
-			if (start_y>600)start_y = 600;
+			//if (start_y>500)start_y = 500;
+			if (start_y>(rect.bottom-rect.top)*.5)start_y = (rect.bottom-rect.top)*.5;
 			this->start_y = start_y;
 		}
 
