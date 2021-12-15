@@ -27,11 +27,21 @@ namespace Geometry
 
 	class Shape
 	{
+		int start_x;
+		int start_y;
 	protected:
 		Color color;
 	public:
-		Shape(Color color) :color(color) {}
+		Shape(int start_x,int start_y,Color color) :start_x(start_x),start_y(start_y),color(color) {}
 		virtual ~Shape() {}
+		int get_start_x()const
+		{
+			return start_x;
+		}
+		int get_start_y()const
+		{
+			return start_y;
+		}
 
 		virtual double get_area()const = 0;      //Площадь фигуры
 		virtual double get_perimeter()const = 0; // Периметер фигуры
@@ -51,7 +61,7 @@ namespace Geometry
 			if (side <= 0) side = 1;
 			this->side = side;
 		}
-		Square(double side, Color color) :Shape(color)
+		Square(int start_x, int start_y, double side, Color color) :Shape(start_x,start_y,color)
 		{
 			set_side(side);
 		}
@@ -89,14 +99,14 @@ namespace Geometry
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
 		
-			int start_x = 400;
-			int start_y = 200;
+			/*int start_x = 400;;
+			int start_y = 200;*/
 			const POINT verticies[] =
 			{
-				{start_x,start_y},
-				{start_x,start_y+side},
-				{start_x+side,start_y+side},
-				{start_x+side,start_y}
+				{get_start_x(),get_start_y()},
+				{get_start_x(),get_start_y()+side},
+				{get_start_x()+side,get_start_y()+side},
+				{get_start_x()+side,get_start_y()}
 			};
 
 			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
@@ -145,7 +155,7 @@ namespace Geometry
 			if (side_B <= 0)side_B = 1;
 			this->side_B = side_B;
 		}
-		Rectangle(double side_A, double side_B, Color color) :Shape(color)
+		Rectangle(int start_x, int start_y, double side_A, double side_B, Color color) :Shape(start_x, start_y, color)
 		{
 			set_side_A(side_A);
 			set_side_B(side_B);
@@ -184,14 +194,14 @@ namespace Geometry
 				SelectObject(hdc, hPen);
 				SelectObject(hdc, hBrush);
 
-				int start_x = 400;
-				int start_y = 200;
+				/*int start_x = 400;
+				int start_y = 200;*/
 				const POINT verticies[] =
 				{
-					{start_x,start_y},
-					{start_x,start_y+side_A},
-					{start_x+side_B,start_y+side_A},
-					{start_x+side_B,start_y}
+					{get_start_x(),get_start_y()},
+					{get_start_x(),get_start_y()+side_A},
+					{get_start_x()+side_B,get_start_y()+side_A},
+					{get_start_x()+side_B,get_start_y()}
 				};
 				Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
 
@@ -220,7 +230,7 @@ namespace Geometry
 	{
 		double radius;
 	public:
-		Circle(double radius, Color color = Color::white) :Shape(color)
+		Circle(int start_x, int start_y, double radius, Color color = Color::white) :Shape(start_x, start_y, color)
 		{
 			set_radius(radius);
 		}
@@ -262,12 +272,12 @@ namespace Geometry
 			SelectObject(hdc, hbrush);
 
 
-			int start_x = 300;
+			/*int start_x = 300;
 			int start_y = 270;
 			int end_x = 400;
-			int end_y = 370;
+			int end_y = 370;*/
 			//Ellipse(hdc, start_x, start_y, end_x, end_y);
-			Ellipse(hdc, start_x, start_y, start_x + 2 * radius, start_y + 2 * radius);
+			Ellipse(hdc, get_start_x(), get_start_y(), get_start_x() + 2 * radius, get_start_y() + 2 * radius);
 
 			DeleteObject(hPen);
 			DeleteObject(hbrush);
@@ -295,7 +305,7 @@ namespace Geometry
 	class Triangle :public Shape
 	{
 	public:
-		Triangle(Color color = Color::white) :Shape(color) {};
+		Triangle(int start_x, int start_y, Color color = Color::white) :Shape(start_x, start_y, color) {};
 		~Triangle() {};
 		virtual double get_height()const = 0;
 	};
@@ -304,7 +314,7 @@ namespace Geometry
 	{
 		double side;
 	public:
-		EquilateralTriangle(double side, Color color = Color::white) :Triangle(color)
+		EquilateralTriangle(int start_x, int start_y, double side, Color color = Color::white) :Triangle(start_x, start_y, color)
 		{
 			set_side(side);
 		}
@@ -339,13 +349,13 @@ namespace Geometry
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
 
-			int start_x = 400;
-			int start_y = 200;
+			/*int start_x = 400;
+			int start_y = 200;*/
 			const POINT verticies[] =
 			{
-				{start_x, start_y + side},
-				{start_x + side , start_y + side},
-				{start_x+side / 2,start_y + side - get_height()}
+				{get_start_x(), get_start_y() + side},
+				{get_start_x() + side , get_start_y() + side},
+				{get_start_x()+side / 2,get_start_y() + side - get_height()}
 			};
 
 			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
@@ -376,7 +386,7 @@ namespace Geometry
 		double side_S;
 		double side_G;
 	public:
-		IsoscelesTriangle(double side_S, double side_G, Color color = Color::white) :Triangle(color)
+		IsoscelesTriangle(int start_x, int start_y, double side_S, double side_G, Color color = Color::white) :Triangle(start_x, start_y, color)
 		{
 			set_side_G(side_G);
 			set_side_S(side_S);
@@ -421,13 +431,13 @@ namespace Geometry
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
 
-			int start_x = 400;
-			int start_y = 200;
+			/*int start_x = 400;
+			int start_y = 200;*/
 			const POINT verticies[] =
 			{
-				{start_x,start_y+side_S},
-				{start_x+side_G,start_y+side_S},
-				{start_x+side_G/2,start_y+side_S-get_height()}
+				{get_start_x(),get_start_y()+side_S},
+				{get_start_x()+side_G,get_start_y()+side_S},
+				{get_start_x()+side_G/2,get_start_y()+side_S-get_height()}
 			};
 
 			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
@@ -462,17 +472,17 @@ void main()
 
 
 	//Shape shape(Color::console_blue);
-	Geometry::Square square(200, Geometry::Color::yellow); square.info();
+	Geometry::Square square(400,200,200, Geometry::Color::yellow); square.info();
 
-	Geometry::Rectangle rect(200, 300, Geometry::Color::conslole_yellow); rect.info();
+	Geometry::Rectangle rect(350,200,200, 300, Geometry::Color::conslole_yellow); rect.info();
 
-	Geometry::Circle kr(200, Geometry::Color::yellow); kr.info();
+	Geometry::Circle kr(400,200,200, Geometry::Color::yellow); kr.info();
 
 	/*const double PI = acos(-1.0);
 	cout << PI << endl;*/
 
-	Geometry::EquilateralTriangle tr(200, Geometry::Color::green); tr.info();
+	Geometry::EquilateralTriangle tr(350,250,200, Geometry::Color::green); tr.info();
 
-	Geometry::IsoscelesTriangle tre(200,250, Geometry::Color::red); tre.info();
+	Geometry::IsoscelesTriangle tre(300,200,200,250, Geometry::Color::red); tre.info();
 
 	}
