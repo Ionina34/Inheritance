@@ -484,7 +484,7 @@ void main()
 
 
 	//Shape shape(Color::console_blue);
-	Geometry::Square square(400, 200,5, 200, Geometry::Color::yellow); square.info();
+	Geometry::Square square(400, 200,100, 200, Geometry::Color::yellow); square.info();
 
 	Geometry::Rectangle rect(350, 200,5, 200, 300, Geometry::Color::conslole_yellow); rect.info();
 
