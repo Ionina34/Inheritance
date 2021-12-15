@@ -8,6 +8,9 @@ using namespace std;
 namespace Geometry
 {
 	//#define DRAW*
+//#define DRAW_CONSOLE
+#define DRAW_RACTANGLE
+
 	enum Color
 	{
 		red = 0x000000FF,
@@ -27,14 +30,14 @@ namespace Geometry
 
 	class Shape
 	{
-		int start_x;
-		int start_y;
-		int line_thickness;
+		unsigned int start_x;
+		unsigned int start_y;
+		unsigned int line_thickness;
 	protected:
 		Color color;
 	public:
-		Shape(int start_x, int start_y, int line_thickness, Color color) :start_x(start_x),
-			start_y(start_y), line_thickness(line_thickness), color(color) {}
+		Shape(unsigned int start_x, unsigned int start_y, unsigned int line_thickness, Color color) :
+			start_x(start_x),start_y(start_y), line_thickness(line_thickness), color(color) {}
 		virtual ~Shape() {}
 		int get_start_x()const
 		{
@@ -47,6 +50,24 @@ namespace Geometry
 		int get_line_thickness()const
 		{
 			return line_thickness;
+		}
+		//На зянятии:
+		void set_line_thickness(unsigned int line_thickness)
+		{
+			if (line_thickness >= 120)line_thickness = 120;
+			this->line_thickness = line_thickness;
+		}
+		void set_start_x(unsigned int start_x)
+		{
+			if (start_x < 250)start_x = 250;
+			if (start_x >800)start_x = 800;
+			this->start_x = start_x;
+		}
+		void set_start_y(unsigned int start_y)
+		{
+			if (start_y <100)start_y = 100;
+			if (start_y>600)start_y = 600;
+			this->start_y = start_y;
 		}
 
 		virtual double get_area()const = 0;      //Площадь фигуры
@@ -67,8 +88,8 @@ namespace Geometry
 			if (side <= 0) side = 1;
 			this->side = side;
 		}
-		Square(int start_x, int start_y, int line_thickness, double side, Color color) :
-			Shape(start_x, start_y,line_thickness, color)
+		Square(unsigned int start_x, unsigned int start_y, unsigned int line_thickness, double side, Color color) :
+			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_side(side);
 		}
@@ -98,6 +119,8 @@ namespace Geometry
 			}
 			SetConsoleTextAttribute(hConsole, Color::console_default);
 #endif // DRAW*
+
+#ifdef DRAW_CONSOLE
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
@@ -121,8 +144,24 @@ namespace Geometry
 			DeleteObject(hPen);
 			DeleteObject(hBrush);
 			ReleaseDC(hwnd, hdc);
-		}
+#endif // 
+#ifdef DRAW_RACTANGLE
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
+			HBRUSH hBrush = CreateSolidBrush(color);
 
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+
+			::Rectangle(hdc, get_start_x(), get_start_y(), get_start_x() + side, get_start_y() + side);
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+			ReleaseDC(hwnd, hdc);
+#endif // DRAW_RACTANGLE
+
+		}
 		void info()
 		{
 			cout << typeid(*this).name() << endl;
@@ -162,7 +201,7 @@ namespace Geometry
 			if (side_B <= 0)side_B = 1;
 			this->side_B = side_B;
 		}
-		Rectangle(int start_x, int start_y, int line_thickness, double side_A, double side_B, Color color) :
+		Rectangle(unsigned int start_x, unsigned int start_y, unsigned int line_thickness, double side_A, double side_B, Color color) :
 			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_side_A(side_A);
@@ -194,6 +233,7 @@ namespace Geometry
 			}
 #endif // DRAW*
 
+#ifdef DRAW_CONSOLE
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
 			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
@@ -216,6 +256,24 @@ namespace Geometry
 			DeleteObject(hPen);
 			DeleteObject(hBrush);
 			ReleaseDC(hwnd, hdc);
+#endif // DRAW_CONSOLE
+
+#ifdef DRAW_RACTANGLE
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+
+			::Rectangle(hdc, get_start_x(), get_start_y(), get_start_x() + side_B, get_start_y() + side_A);
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+			ReleaseDC(hwnd, hdc);
+#endif // DRAW_RACTANGLE
+
 		}
 		void info()
 		{
@@ -238,7 +296,9 @@ namespace Geometry
 	{
 		double radius;
 	public:
-		Circle(int start_x, int start_y, int line_thickness, double radius, Color color = Color::white) :
+		Circle(unsigned int start_x, unsigned  int start_y, unsigned int line_thickness, double radius, Color color = Color::white) :
+		//На зянятии:
+		//Circle( double radius, Color color = Color::white,unsigned int start_x=5, unsigned  int start_y=400, unsigned int line_thickness=100) :
 			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_radius(radius);
@@ -324,7 +384,7 @@ namespace Geometry
 	{
 		double side;
 	public:
-		EquilateralTriangle(int start_x, int start_y, int line_thickness, double side, Color color = Color::white) :
+		EquilateralTriangle(unsigned int start_x, unsigned int start_y, unsigned  int line_thickness, double side, Color color = Color::white) :
 			Triangle(start_x, start_y, line_thickness, color)
 		{
 			set_side(side);
@@ -355,7 +415,7 @@ namespace Geometry
 		{
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
-			HPEN hPen = CreatePen(PS_SOLID,get_line_thickness(), color);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
 			HBRUSH hBrush = CreateSolidBrush(color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
@@ -397,7 +457,7 @@ namespace Geometry
 		double side_S;
 		double side_G;
 	public:
-		IsoscelesTriangle(int start_x, int start_y,int line_thickness, double side_S, double side_G, Color color = Color::white) :
+		IsoscelesTriangle(int start_x, int start_y, int line_thickness, double side_S, double side_G, Color color = Color::white) :
 			Triangle(start_x, start_y, line_thickness, color)
 		{
 			set_side_G(side_G);
@@ -484,17 +544,18 @@ void main()
 
 
 	//Shape shape(Color::console_blue);
-	Geometry::Square square(400, 200,100, 200, Geometry::Color::yellow); square.info();
+	Geometry::Square square(400, 200, 100, 200, Geometry::Color::yellow); square.info();
 
-	Geometry::Rectangle rect(350, 200,5, 200, 300, Geometry::Color::conslole_yellow); rect.info();
+	Geometry::Rectangle rect(350, 200,120, 200, 300, Geometry::Color::conslole_yellow); rect.info();
 
-	Geometry::Circle kr(70, 200,5, 100, Geometry::Color::yellow); kr.info();
+	Geometry::Circle kr(70, 200, 5, 100, Geometry::Color::yellow); kr.info();
 
 	/*const double PI = acos(-1.0);
 	cout << PI << endl;*/
 
-	Geometry::EquilateralTriangle tr(350, 250,5, 200, Geometry::Color::green); tr.info();
+	Geometry::EquilateralTriangle tr(350, 250, 15, 200, Geometry::Color::green); tr.info();
+	//Geometry::EquilateralTriangle tr( 200, Geometry::Color::green,20,200,50); - На занятии   
 
-	Geometry::IsoscelesTriangle tre(300, 200, 5, 200, 250, Geometry::Color::red); tre.info();
+	Geometry::IsoscelesTriangle tre(150, 400, 5, 200, 250, Geometry::Color::red); tre.info();
 
 }
