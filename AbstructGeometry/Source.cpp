@@ -3,6 +3,7 @@
 #include<Windows.h>
 #include<conio.h>
 #include<cmath>
+#include<thread>
 using namespace std;
 
 namespace Geometry
@@ -37,7 +38,7 @@ namespace Geometry
 		Color color;
 	public:
 		Shape(unsigned int start_x, unsigned int start_y, unsigned int line_thickness, Color color) :
-			start_x(start_x),start_y(start_y), line_thickness(line_thickness), color(color) {}
+			start_x(start_x), start_y(start_y), line_thickness(line_thickness), color(color) {}
 		virtual ~Shape() {}
 		int get_start_x()const
 		{
@@ -61,22 +62,30 @@ namespace Geometry
 		{
 			HWND hwnd = GetConsoleWindow();
 			RECT rect;
-			 GetWindowRect(hwnd,&rect);
+			GetWindowRect(hwnd, &rect);
 
 			if (start_x < 400)start_x = 400;
 			//if (start_x >800)start_x = 800;
-			if (start_x >(rect.right-rect.left)/2)start_x = (rect.right-rect.left)/2;
+			if (start_x > (rect.right - rect.left) / 2)start_x = (rect.right - rect.left) / 2;
 			this->start_x = start_x;
 		}
 		void set_start_y(unsigned int start_y)
 		{
 			HWND hwnd = GetConsoleWindow();
 			RECT rect;
-			GetWindowRect(hwnd, & rect);
-			if (start_y <100)start_y = 100;
+			GetWindowRect(hwnd, &rect);
+			if (start_y < 100)start_y = 100;
 			//if (start_y>500)start_y = 500;
-			if (start_y>(rect.bottom-rect.top)*.5)start_y = (rect.bottom-rect.top)*.5;
+			if (start_y > (rect.bottom - rect.top) * .5)start_y = (rect.bottom - rect.top) * .5;
 			this->start_y = start_y;
+		}
+
+		void call_draw()const
+		{
+			while (true)
+			{
+				draw();
+			}
 		}
 
 		virtual double get_area()const = 0;      //Площадь фигуры
@@ -177,13 +186,22 @@ namespace Geometry
 			cout << "Длина стороны:\t" << side << endl;
 			cout << "Площадь:\t" << get_area() << endl;
 			cout << "Периметр:\t" << get_perimeter() << endl;
-			char key;
+			/*char key;
 			do
 			{
 				draw();
 				if (key = _kbhit())key = _getch();
 			} while (key != 27);
-			system("CLS");
+			system("CLS");*/
+			std::thread draw_thread(&Square::call_draw, this);
+			draw_thread.detach();
+		}
+		void call_draw()
+		{
+			while (true)
+			{
+				draw();
+			}
 		}
 	};
 
@@ -291,13 +309,22 @@ namespace Geometry
 			cout << "Длина стороны B:\t" << side_B << endl;
 			cout << "Площадь:\t" << get_area() << endl;
 			cout << "Периметр:\t" << get_perimeter() << endl;
-			char key;
+			/*char key;
 			do
 			{
 				draw();
 				if (key = _kbhit())key = _getch();
 			} while (key != 27);
-			system("CLS");
+			system("CLS");*/
+			std::thread draw_thread(&Rectangle::call_draw, this);
+			draw_thread.detach();
+		}
+		void call_draw()
+		{
+			while (true)
+			{
+				draw();
+			}
 		}
 	};
 
@@ -306,8 +333,8 @@ namespace Geometry
 		double radius;
 	public:
 		Circle(unsigned int start_x, unsigned  int start_y, unsigned int line_thickness, double radius, Color color = Color::white) :
-		//На зянятии:
-		//Circle( double radius, Color color = Color::white,unsigned int start_x=5, unsigned  int start_y=400, unsigned int line_thickness=100) :
+			//На зянятии:
+			//Circle( double radius, Color color = Color::white,unsigned int start_x=5, unsigned  int start_y=400, unsigned int line_thickness=100) :
 			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_radius(radius);
@@ -367,17 +394,25 @@ namespace Geometry
 			cout << "Радиус круга:\t" << get_radius() << endl;
 			cout << "Площадь круга:\t" << get_area() << endl;
 			cout << "Периметр круга:\t" << get_perimeter() << endl;
-			char key;
-			do
+			//char key;
+			//do
+			//{
+			//	draw();
+			//	//if (_kbhit())break;//_kbhit() ожидает нажатия клавиш 
+			//	//и возвращает нулевое значение при ее нажатии
+			//	if (key = _kbhit())key = _getch();
+			//} while (key != 27);
+			//system("CLS");
+			std::thread draw_thread(&Circle::call_draw, this);
+			draw_thread.detach();
+		}
+		void call_draw()const
+		{
+			while (true)
 			{
 				draw();
-				//if (_kbhit())break;//_kbhit() ожидает нажатия клавиш 
-				//и возвращает нулевое значение при ее нажатии
-				if (key = _kbhit())key = _getch();
-			} while (key != 27);
-			system("CLS");
+			}
 		}
-
 	};
 
 	class Triangle :public Shape
@@ -451,14 +486,23 @@ namespace Geometry
 			cout << "Высота треуголька:\t" << get_height() << endl;
 			cout << "Площадь треугольника:\t" << get_area() << endl;
 			cout << "Периметр треугольника:\t" << get_perimeter() << endl;
-			char key;
+			/*char key;
 			do
 			{
 				draw();
 				if (key = _kbhit())key = _getch();
 			} while (key != 27);
-			system("CLS");
+			system("CLS");*/
+			std::thread draw_thread(&Shape::call_draw, this);
+			draw_thread.detach();
 		}
+		/*void call_draw()
+		{
+			while (true)
+			{
+				draw();
+			}
+		}*/
 	};
 
 	class IsoscelesTriangle : public Triangle
@@ -542,7 +586,9 @@ namespace Geometry
 				if (key = _kbhit())key = _getch();
 			} while (key != 27);
 			//system("CLS");
+			
 		}
+
 	};
 }
 
@@ -553,16 +599,16 @@ void main()
 
 
 	//Shape shape(Color::console_blue);
-	Geometry::Square square(400, 200, 100, 200, Geometry::Color::yellow); square.info();
+	Geometry::Square square(100, 600, 100, 50, Geometry::Color::white); square.info();
 
-	Geometry::Rectangle rect(350, 200,120, 200, 300, Geometry::Color::conslole_yellow); rect.info();
+	Geometry::Rectangle rect(350, 200, 120, 200, 300, Geometry::Color::blue); rect.info();
 
-	Geometry::Circle kr(70, 200, 5, 100, Geometry::Color::yellow); kr.info();
+	Geometry::Circle kr(170, 20, 5, 100, Geometry::Color::yellow); kr.info();
 
 	/*const double PI = acos(-1.0);
 	cout << PI << endl;*/
 
-	Geometry::EquilateralTriangle tr(350, 250, 15, 200, Geometry::Color::green); tr.info();
+	Geometry::EquilateralTriangle tr(700, 300, 15, 200, Geometry::Color::green); tr.info();
 	//Geometry::EquilateralTriangle tr( 200, Geometry::Color::green,20,200,50); - На занятии   
 
 	Geometry::IsoscelesTriangle tre(150, 400, 5, 200, 250, Geometry::Color::red); tre.info();
