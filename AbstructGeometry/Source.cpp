@@ -7,6 +7,7 @@ using namespace std;
 
 namespace Geometry
 {
+//#define DRAW*
 	enum Color
 	{
 		red = 0x000000FF,
@@ -67,6 +68,7 @@ namespace Geometry
 
 		void draw()const
 		{
+#ifdef DRAW*
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			SetConsoleTextAttribute(hConsole, color);
 			for (int i = 0; i < side; i++)
@@ -78,6 +80,30 @@ namespace Geometry
 				cout << endl;
 			}
 			SetConsoleTextAttribute(hConsole, Color::console_default);
+#endif // DRAW*
+			HWND hwnd =  GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+		
+			int start_x = 400;
+			int start_y = 200;
+			const POINT verticies[] =
+			{
+				{start_x,start_y},
+				{start_x,start_y+side},
+				{start_x+side,start_y+side},
+				{start_x+side,start_y}
+			};
+
+			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+			ReleaseDC(hwnd,hdc );
 		}
 
 		void info()
@@ -86,7 +112,13 @@ namespace Geometry
 			cout << "Длина стороны:\t" << side << endl;
 			cout << "Площадь:\t" << get_area() << endl;
 			cout << "Периметр:\t" << get_perimeter() << endl;
-			draw();
+			char key;
+			do
+			{
+				draw();
+				if (key = _kbhit())key = _getch();
+			} while (key != 27);
+			system("CLS");
 		}
 	};
 
@@ -130,6 +162,7 @@ namespace Geometry
 		}
 		void draw()const
 		{
+#ifdef DRAW*
 			HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 			for (int i = 0; i < side_A; i++)
 			{
@@ -141,6 +174,30 @@ namespace Geometry
 				SetConsoleTextAttribute(hConsole, Color::console_default);
 				cout << endl;
 			}
+#endif // DRAW*
+
+			HWND hwnd = GetConsoleWindow();
+				HDC hdc = GetDC(hwnd);
+				HPEN hPen = CreatePen(PS_SOLID, 5, color);
+				HBRUSH hBrush = CreateSolidBrush(color);
+
+				SelectObject(hdc, hPen);
+				SelectObject(hdc, hBrush);
+
+				int start_x = 400;
+				int start_y = 200;
+				const POINT verticies[] =
+				{
+					{start_x,start_y},
+					{start_x,start_y+side_A},
+					{start_x+side_B,start_y+side_A},
+					{start_x+side_B,start_y}
+				};
+				Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
+
+				DeleteObject(hPen);
+				DeleteObject(hBrush);
+				ReleaseDC(hwnd, hdc);
 		}
 		void info()
 		{
@@ -149,7 +206,13 @@ namespace Geometry
 			cout << "Длина стороны B:\t" << side_B << endl;
 			cout << "Площадь:\t" << get_area() << endl;
 			cout << "Периметр:\t" << get_perimeter() << endl;
-			draw();
+			char key;
+			do
+			{
+				draw();
+				if (key = _kbhit())key = _getch();
+			} while (key != 27);
+			system("CLS");
 		}
 	};
 
@@ -399,9 +462,9 @@ void main()
 
 
 	//Shape shape(Color::console_blue);
-	Geometry::Square square(8, Geometry::Color::console_purpul); square.info();
+	Geometry::Square square(200, Geometry::Color::yellow); square.info();
 
-	Geometry::Rectangle rect(5, 12, Geometry::Color::conslole_yellow); rect.info();
+	Geometry::Rectangle rect(200, 300, Geometry::Color::conslole_yellow); rect.info();
 
 	Geometry::Circle kr(200, Geometry::Color::yellow); kr.info();
 
