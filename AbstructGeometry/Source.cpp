@@ -7,7 +7,7 @@ using namespace std;
 
 namespace Geometry
 {
-//#define DRAW*
+	//#define DRAW*
 	enum Color
 	{
 		red = 0x000000FF,
@@ -29,10 +29,12 @@ namespace Geometry
 	{
 		int start_x;
 		int start_y;
+		int line_thickness;
 	protected:
 		Color color;
 	public:
-		Shape(int start_x,int start_y,Color color) :start_x(start_x),start_y(start_y),color(color) {}
+		Shape(int start_x, int start_y, int line_thickness, Color color) :start_x(start_x),
+			start_y(start_y), line_thickness(line_thickness), color(color) {}
 		virtual ~Shape() {}
 		int get_start_x()const
 		{
@@ -41,6 +43,10 @@ namespace Geometry
 		int get_start_y()const
 		{
 			return start_y;
+		}
+		int get_line_thickness()const
+		{
+			return line_thickness;
 		}
 
 		virtual double get_area()const = 0;      //Площадь фигуры
@@ -61,7 +67,8 @@ namespace Geometry
 			if (side <= 0) side = 1;
 			this->side = side;
 		}
-		Square(int start_x, int start_y, double side, Color color) :Shape(start_x,start_y,color)
+		Square(int start_x, int start_y, int line_thickness, double side, Color color) :
+			Shape(start_x, start_y,line_thickness, color)
 		{
 			set_side(side);
 		}
@@ -91,29 +98,29 @@ namespace Geometry
 			}
 			SetConsoleTextAttribute(hConsole, Color::console_default);
 #endif // DRAW*
-			HWND hwnd =  GetConsoleWindow();
+			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
-			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
 			HBRUSH hBrush = CreateSolidBrush(color);
 
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
-		
+
 			/*int start_x = 400;;
 			int start_y = 200;*/
 			const POINT verticies[] =
 			{
 				{get_start_x(),get_start_y()},
-				{get_start_x(),get_start_y()+side},
-				{get_start_x()+side,get_start_y()+side},
-				{get_start_x()+side,get_start_y()}
+				{get_start_x(),get_start_y() + side},
+				{get_start_x() + side,get_start_y() + side},
+				{get_start_x() + side,get_start_y()}
 			};
 
 			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
 
 			DeleteObject(hPen);
 			DeleteObject(hBrush);
-			ReleaseDC(hwnd,hdc );
+			ReleaseDC(hwnd, hdc);
 		}
 
 		void info()
@@ -155,7 +162,8 @@ namespace Geometry
 			if (side_B <= 0)side_B = 1;
 			this->side_B = side_B;
 		}
-		Rectangle(int start_x, int start_y, double side_A, double side_B, Color color) :Shape(start_x, start_y, color)
+		Rectangle(int start_x, int start_y, int line_thickness, double side_A, double side_B, Color color) :
+			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_side_A(side_A);
 			set_side_B(side_B);
@@ -187,27 +195,27 @@ namespace Geometry
 #endif // DRAW*
 
 			HWND hwnd = GetConsoleWindow();
-				HDC hdc = GetDC(hwnd);
-				HPEN hPen = CreatePen(PS_SOLID, 5, color);
-				HBRUSH hBrush = CreateSolidBrush(color);
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
+			HBRUSH hBrush = CreateSolidBrush(color);
 
-				SelectObject(hdc, hPen);
-				SelectObject(hdc, hBrush);
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
 
-				/*int start_x = 400;
-				int start_y = 200;*/
-				const POINT verticies[] =
-				{
-					{get_start_x(),get_start_y()},
-					{get_start_x(),get_start_y()+side_A},
-					{get_start_x()+side_B,get_start_y()+side_A},
-					{get_start_x()+side_B,get_start_y()}
-				};
-				Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
+			/*int start_x = 400;
+			int start_y = 200;*/
+			const POINT verticies[] =
+			{
+				{get_start_x(),get_start_y()},
+				{get_start_x(),get_start_y() + side_A},
+				{get_start_x() + side_B,get_start_y() + side_A},
+				{get_start_x() + side_B,get_start_y()}
+			};
+			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
 
-				DeleteObject(hPen);
-				DeleteObject(hBrush);
-				ReleaseDC(hwnd, hdc);
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+			ReleaseDC(hwnd, hdc);
 		}
 		void info()
 		{
@@ -230,7 +238,8 @@ namespace Geometry
 	{
 		double radius;
 	public:
-		Circle(int start_x, int start_y, double radius, Color color = Color::white) :Shape(start_x, start_y, color)
+		Circle(int start_x, int start_y, int line_thickness, double radius, Color color = Color::white) :
+			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_radius(radius);
 		}
@@ -262,7 +271,7 @@ namespace Geometry
 			//HWND hwnd = FindWindow(NULL, /*L"Inheritance - Microsoft Visual Studio"*/ L"Desktop");
 			HDC hdc = GetDC(hwnd); //Создаем контекст. На это контексте мы будем рисовать
 
-			HPEN hPen = CreatePen(PS_SOLID, 5, color);//Создаем карандаш
+			HPEN hPen = CreatePen(PS_SOLID, /*5*/ get_line_thickness(), color);//Создаем карандаш
 			//PS_SOLID - сплошная линия
 			//5 - толщина линии в пикселях
 			//RGB(...) - цвет
@@ -305,7 +314,8 @@ namespace Geometry
 	class Triangle :public Shape
 	{
 	public:
-		Triangle(int start_x, int start_y, Color color = Color::white) :Shape(start_x, start_y, color) {};
+		Triangle(int start_x, int start_y, int line_thickness, Color color = Color::white) :
+			Shape(start_x, start_y, line_thickness, color) {};
 		~Triangle() {};
 		virtual double get_height()const = 0;
 	};
@@ -314,7 +324,8 @@ namespace Geometry
 	{
 		double side;
 	public:
-		EquilateralTriangle(int start_x, int start_y, double side, Color color = Color::white) :Triangle(start_x, start_y, color)
+		EquilateralTriangle(int start_x, int start_y, int line_thickness, double side, Color color = Color::white) :
+			Triangle(start_x, start_y, line_thickness, color)
 		{
 			set_side(side);
 		}
@@ -344,7 +355,7 @@ namespace Geometry
 		{
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
-			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HPEN hPen = CreatePen(PS_SOLID,get_line_thickness(), color);
 			HBRUSH hBrush = CreateSolidBrush(color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
@@ -355,7 +366,7 @@ namespace Geometry
 			{
 				{get_start_x(), get_start_y() + side},
 				{get_start_x() + side , get_start_y() + side},
-				{get_start_x()+side / 2,get_start_y() + side - get_height()}
+				{get_start_x() + side / 2,get_start_y() + side - get_height()}
 			};
 
 			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
@@ -386,7 +397,8 @@ namespace Geometry
 		double side_S;
 		double side_G;
 	public:
-		IsoscelesTriangle(int start_x, int start_y, double side_S, double side_G, Color color = Color::white) :Triangle(start_x, start_y, color)
+		IsoscelesTriangle(int start_x, int start_y,int line_thickness, double side_S, double side_G, Color color = Color::white) :
+			Triangle(start_x, start_y, line_thickness, color)
 		{
 			set_side_G(side_G);
 			set_side_S(side_S);
@@ -426,7 +438,7 @@ namespace Geometry
 		{
 			HWND hwnd = GetConsoleWindow();
 			HDC hdc = GetDC(hwnd);
-			HPEN hPen = CreatePen(PS_SOLID, 5, color);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
 			HBRUSH hBrush = CreateSolidBrush(color);
 			SelectObject(hdc, hPen);
 			SelectObject(hdc, hBrush);
@@ -435,16 +447,16 @@ namespace Geometry
 			int start_y = 200;*/
 			const POINT verticies[] =
 			{
-				{get_start_x(),get_start_y()+side_S},
-				{get_start_x()+side_G,get_start_y()+side_S},
-				{get_start_x()+side_G/2,get_start_y()+side_S-get_height()}
+				{get_start_x(),get_start_y() + side_S},
+				{get_start_x() + side_G,get_start_y() + side_S},
+				{get_start_x() + side_G / 2,get_start_y() + side_S - get_height()}
 			};
 
 			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
 
 			DeleteObject(hBrush);
 			DeleteObject(hPen);
-			ReleaseDC(hwnd,hdc);
+			ReleaseDC(hwnd, hdc);
 		}
 		void info() const
 		{
@@ -472,17 +484,17 @@ void main()
 
 
 	//Shape shape(Color::console_blue);
-	Geometry::Square square(400,200,200, Geometry::Color::yellow); square.info();
+	Geometry::Square square(400, 200,5, 200, Geometry::Color::yellow); square.info();
 
-	Geometry::Rectangle rect(350,200,200, 300, Geometry::Color::conslole_yellow); rect.info();
+	Geometry::Rectangle rect(350, 200,5, 200, 300, Geometry::Color::conslole_yellow); rect.info();
 
-	Geometry::Circle kr(400,200,200, Geometry::Color::yellow); kr.info();
+	Geometry::Circle kr(70, 200,5, 100, Geometry::Color::yellow); kr.info();
 
 	/*const double PI = acos(-1.0);
 	cout << PI << endl;*/
 
-	Geometry::EquilateralTriangle tr(350,250,200, Geometry::Color::green); tr.info();
+	Geometry::EquilateralTriangle tr(350, 250,5, 200, Geometry::Color::green); tr.info();
 
-	Geometry::IsoscelesTriangle tre(300,200,200,250, Geometry::Color::red); tre.info();
+	Geometry::IsoscelesTriangle tre(300, 200, 5, 200, 250, Geometry::Color::red); tre.info();
 
-	}
+}
