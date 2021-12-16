@@ -37,7 +37,7 @@ namespace Geometry
 		Color color;
 	public:
 		Shape(unsigned int start_x, unsigned int start_y, unsigned int line_thickness, Color color) :
-			start_x(start_x),start_y(start_y), line_thickness(line_thickness), color(color) {}
+			start_x(start_x), start_y(start_y), line_thickness(line_thickness), color(color) {}
 		virtual ~Shape() {}
 		int get_start_x()const
 		{
@@ -61,21 +61,21 @@ namespace Geometry
 		{
 			HWND hwnd = GetConsoleWindow();
 			RECT rect;
-			 GetWindowRect(hwnd,&rect);
+			GetWindowRect(hwnd, &rect);
 
 			if (start_x < 400)start_x = 400;
 			//if (start_x >800)start_x = 800;
-			if (start_x >(rect.right-rect.left)/2)start_x = (rect.right-rect.left)/2;
+			if (start_x > (rect.right - rect.left) / 2)start_x = (rect.right - rect.left) / 2;
 			this->start_x = start_x;
 		}
 		void set_start_y(unsigned int start_y)
 		{
 			HWND hwnd = GetConsoleWindow();
 			RECT rect;
-			GetWindowRect(hwnd, & rect);
-			if (start_y <100)start_y = 100;
+			GetWindowRect(hwnd, &rect);
+			if (start_y < 100)start_y = 100;
 			//if (start_y>500)start_y = 500;
-			if (start_y>(rect.bottom-rect.top)*.5)start_y = (rect.bottom-rect.top)*.5;
+			if (start_y > (rect.bottom - rect.top) * .5)start_y = (rect.bottom - rect.top) * .5;
 			this->start_y = start_y;
 		}
 
@@ -306,8 +306,8 @@ namespace Geometry
 		double radius;
 	public:
 		Circle(unsigned int start_x, unsigned  int start_y, unsigned int line_thickness, double radius, Color color = Color::white) :
-		//На зянятии:
-		//Circle( double radius, Color color = Color::white,unsigned int start_x=5, unsigned  int start_y=400, unsigned int line_thickness=100) :
+			//На зянятии:
+			//Circle( double radius, Color color = Color::white,unsigned int start_x=5, unsigned  int start_y=400, unsigned int line_thickness=100) :
 			Shape(start_x, start_y, line_thickness, color)
 		{
 			set_radius(radius);
@@ -541,7 +541,82 @@ namespace Geometry
 				draw();
 				if (key = _kbhit())key = _getch();
 			} while (key != 27);
-			//system("CLS");
+			system("CLS");
+		}
+	};
+
+	class RightTriangle : public Triangle
+	{
+		
+		double side_K;
+	public:
+		RightTriangle(int start_x, int start_y, int line_thickness, 
+			double side_K, Color color = Color::white) :
+			Triangle(start_x, start_y, line_thickness, color)
+		{
+			set_side_K(side_K);
+		}
+		~RightTriangle() {}
+		
+		void set_side_K(double side_K)
+		{
+			if (side_K <= 0)side_K = 1;
+			this->side_K = side_K;
+		}
+		
+		double get_side_K(double side_K)
+		{
+			return side_K;
+		}
+		double get_height()const
+		{
+			return sqrt(side_K * side_K - (sqrt(pow(side_K,2)+pow(side_K,2))));
+		}
+		double get_area()const
+		{
+			return (side_K * side_K) / 2;
+		}
+		double get_perimeter()const
+		{
+			return side_K + side_K + (sqrt(pow(side_K, 2) + pow(side_K, 2)));
+		}
+		void draw()const
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, get_line_thickness(), color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+
+			const POINT verticies[] =
+			{
+				{get_start_x(),get_start_y()},
+			{get_start_x(),get_start_y() + side_K},
+				{get_start_x() + side_K,get_start_y() + side_K}
+			};
+
+			Polygon(hdc, verticies, sizeof(verticies) / sizeof(POINT));
+
+			DeleteObject(hPen);
+			DeleteObject(hBrush);
+			ReleaseDC(hwnd, hdc);
+		}
+		void info() const
+		{
+			cout << typeid(*this).name() << endl;
+			cout << "Длина сторон:\t" << side_K << endl;
+			cout << "Высота треуголька:\t" << get_height() << endl;
+			cout << "Площадь треугольника:\t" << get_area() << endl;
+			cout << "Периметр треугольника:\t" << get_perimeter() << endl;
+			char key;
+			do
+			{
+				draw();
+				if (key = _kbhit())key = _getch();
+			} while (key != 27);
+			system("CLS");
 		}
 	};
 }
@@ -555,7 +630,7 @@ void main()
 	//Shape shape(Color::console_blue);
 	Geometry::Square square(400, 200, 100, 200, Geometry::Color::yellow); square.info();
 
-	Geometry::Rectangle rect(350, 200,120, 200, 300, Geometry::Color::conslole_yellow); rect.info();
+	Geometry::Rectangle rect(350, 200, 120, 200, 300, Geometry::Color::conslole_yellow); rect.info();
 
 	Geometry::Circle kr(70, 200, 5, 100, Geometry::Color::yellow); kr.info();
 
@@ -566,5 +641,7 @@ void main()
 	//Geometry::EquilateralTriangle tr( 200, Geometry::Color::green,20,200,50); - На занятии   
 
 	Geometry::IsoscelesTriangle tre(150, 400, 5, 200, 250, Geometry::Color::red); tre.info();
+
+	Geometry::RightTriangle  k(350, 400, 5, 200, Geometry::Color::red); k.info();
 
 }
