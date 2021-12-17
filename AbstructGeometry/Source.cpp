@@ -547,7 +547,6 @@ namespace Geometry
 
 	class RightTriangle : public Triangle
 	{
-		
 		double side_K;
 	public:
 		RightTriangle(int start_x, int start_y, int line_thickness, 
@@ -570,7 +569,7 @@ namespace Geometry
 		}
 		double get_height()const
 		{
-			return sqrt(side_K * side_K - (sqrt(pow(side_K,2)+pow(side_K,2))));
+			return sqrt(side_K * side_K - (pow(((sqrt(pow(side_K,2)+pow(side_K,2)))/2),2)));
 		}
 		double get_area()const
 		{
@@ -606,7 +605,8 @@ namespace Geometry
 		void info() const
 		{
 			cout << typeid(*this).name() << endl;
-			cout << "Длина сторон:\t" << side_K << endl;
+			cout << "Длина катетов:\t" << side_K << endl;
+			cout << "Длина гипотенузы:\t" << sqrt(pow(side_K, 2) + pow(side_K, 2)) << endl;
 			cout << "Высота треуголька:\t" << get_height() << endl;
 			cout << "Площадь треугольника:\t" << get_area() << endl;
 			cout << "Периметр треугольника:\t" << get_perimeter() << endl;
